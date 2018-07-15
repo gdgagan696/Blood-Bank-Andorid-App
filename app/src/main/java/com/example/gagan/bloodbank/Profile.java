@@ -47,7 +47,7 @@ public class Profile extends AppCompatActivity {
     private List<ListItem> listItems;
     private DatabaseReference databaseReference;
 
-// ye wALA DONOR FRAGMENT ME KRNA H ok
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,14 +66,16 @@ public class Profile extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext(), LinearLayoutManager.VERTICAL));
         listItems = new ArrayList<>();
-        adapter = new CustomAdapter(listItems, this);
-        recyclerView.setAdapter(adapter);
+         adapter = new CustomAdapter(listItems, this);
+  recyclerView.setAdapter(adapter);
         Query query=databaseReference.orderByChild("donor").equalTo("Donor");
         query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Log.d("GAGAN","DATASNAPSHOT IS THE "+dataSnapshot.child("name").getValue());
                 listItems.add(dataSnapshot.getValue(ListItem.class));
                 adapter.notifyDataSetChanged();
+
 
             }
 
@@ -98,6 +100,28 @@ public class Profile extends AppCompatActivity {
             }
         });
 
+       /* query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot!=null)
+                {
+                    adapter = new CustomAdapter(listItems, Profile.this);
+                    recyclerView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                }
+                else
+                {
+                    Toast.makeText(Profile.this, "No Donar Found", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });*/
+
+
     }
 
     @Override
@@ -117,9 +141,9 @@ public class Profile extends AppCompatActivity {
                 @Override
                 public boolean onQueryTextChange(String newText) {
                     try {
-                            adapter.getFilter().filter(newText);
+                        adapter.getFilter().filter(newText);
                     } catch (Exception e) {
-                       e.printStackTrace();
+                        e.printStackTrace();
                     }
                     return false;
                 }
@@ -134,7 +158,7 @@ public class Profile extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if(item.getItemId() == R.id.action_profile){
-            startActivity(new Intent(Profile.this, EditProfileActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+            startActivity(new Intent(Profile.this,UserProfile.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
         }
         if (item.getItemId()==R.id.action_logout)
         {

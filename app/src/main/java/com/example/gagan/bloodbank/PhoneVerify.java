@@ -1,9 +1,7 @@
 package com.example.gagan.bloodbank;
 
 import android.app.Dialog;
-import android.app.DownloadManager;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -28,28 +26,23 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 
 import java.util.concurrent.TimeUnit;
 
 public class PhoneVerify extends AppCompatActivity {
-    SharedPreferences prefs = null;
 
     private FirebaseAuth firebaseAuth;
-    private EditText ephonenum;
+    private  EditText ephonenum;
     private Button sendOtp;
     private Dialog dialog;
     private String mVerificationId;
+    EditText otp;
+    TextView mob;
+    Button resend,verify;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mcallbacks;
     private PhoneAuthProvider.ForceResendingToken mResendToken;
 
     private FirebaseAuth.AuthStateListener mstate;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,21 +51,24 @@ public class PhoneVerify extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Blood Bank");
 
-
-        dialog = new Dialog(this);
+        dialog=new Dialog(this);
+        dialog.setTitle("Verify OTP");
         dialog.setContentView(R.layout.custom_dialog);
-        ephonenum = (EditText) findViewById(R.id.field_phone_number);
-        firebaseAuth = FirebaseAuth.getInstance();
-        sendOtp = (Button) findViewById(R.id.button_start_verification);
-        prefs = getSharedPreferences("com.example.gagan.bloodbank", MODE_PRIVATE);
+        ephonenum=(EditText)findViewById(R.id.field_phone_number);
+        firebaseAuth=FirebaseAuth.getInstance();
+        sendOtp=(Button)findViewById(R.id.button_start_verification);
+        verify=dialog.findViewById(R.id.button_verify_phone);
+        otp=dialog.findViewById(R.id.field_verification_code);
+        mob=dialog.findViewById(R.id.mob);
+        resend=dialog.findViewById(R.id.button_resend_otp);
+        FirebaseUser user= FirebaseAuth.getInstance().getCurrentUser();
 
-
-        mstate = new FirebaseAuth.AuthStateListener() {
+        mstate= new FirebaseAuth.AuthStateListener() {
             @Override
 
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if (firebaseAuth.getCurrentUser() != null) {// to check whether user is already logged in or not
-                    startActivity(new Intent(PhoneVerify.this, Profile.class));
+                if (firebaseAuth.getCurrentUser()!=null){// to check whether user is already logged in or not
+                    startActivity(new Intent(PhoneVerify.this,Profile.class));
 
                 }
             }
@@ -82,15 +78,19 @@ public class PhoneVerify extends AppCompatActivity {
         sendOtp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String phonenum = ephonenum.getText().toString();
-                if (phonenum.length() < 10 || phonenum.length() > 10 || phonenum.isEmpty()) {
-                    Toast.makeText(PhoneVerify.this, "Invalid Phone Number", Toast.LENGTH_SHORT).show();
+                String phonenum=ephonenum.getText().toString();
+                if(phonenum.length()<10|| phonenum.length()>10||phonenum.isEmpty())
+                {
+                    // Toast.makeText(PhoneVerify.this, "Invalid Phone Number", Toast.LENGTH_SHORT).show();
+                    ephonenum.setError("Invalid Phone Number");
                 }
-                PhoneAuthProvider.getInstance().verifyPhoneNumber("+91" + phonenum, 60, TimeUnit.SECONDS, PhoneVerify.this, mcallbacks);
-                Toast.makeText(PhoneVerify.this, "OTP Sent,Please Check Your Phone", Toast.LENGTH_SHORT).show();
-                dialog.show();
-                dialog.setCancelable(false);
-
+                else {
+                    PhoneAuthProvider.getInstance().verifyPhoneNumber("+91" + phonenum, 60, TimeUnit.SECONDS, PhoneVerify.this, mcallbacks);
+                    // Toast.makeText(PhoneVerify.this, "OTP Sent,Please Check Your Phone", Toast.LENGTH_SHORT).show();
+                    // dialog.show();
+                    //dialog.setCancelable(false);
+                    // startActivity(new Intent(PhoneVerify.this,PhoneOtp.class));
+                }
             }
         });
 
@@ -98,10 +98,11 @@ public class PhoneVerify extends AppCompatActivity {
 
             @Override
             public void onVerificationCompleted(PhoneAuthCredential credential) {
+
                 //Toast.makeText(PhoneVerify.this, "Verified", Toast.LENGTH_LONG).show();
                 String code = credential.getSmsCode();
                 if (code != null) {
-                    Toast.makeText(PhoneVerify.this, "Code is " + code, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(PhoneVerify.this, "Code is "+code, Toast.LENGTH_SHORT).show();
                     //verifyOtp(code);
                     signInWithPhoneAuthCredential(credential);
                 }
@@ -110,11 +111,11 @@ public class PhoneVerify extends AppCompatActivity {
 
             @Override
             public void onVerificationFailed(FirebaseException e) {
-                Toast.makeText(PhoneVerify.this, "Login Failed " + e.getMessage(), Toast.LENGTH_LONG).show();
-                Log.d("Gagan", "ERROR IS " + e.getMessage());
+                Toast.makeText(PhoneVerify.this, "Login Failed "+e.getMessage(), Toast.LENGTH_LONG).show();
+                Log.d("Gagan","ERROR IS "+e.getMessage());
                 if (e instanceof FirebaseAuthInvalidCredentialsException) {
                     // Invalid request
-                    Toast.makeText(PhoneVerify.this, "In Valid Request", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PhoneVerify.this, "Invalid Phone Number", Toast.LENGTH_SHORT).show();
 
                 } else if (e instanceof FirebaseTooManyRequestsException) {
                     // The SMS quota for the project has been exceeded
@@ -127,7 +128,10 @@ public class PhoneVerify extends AppCompatActivity {
             public void onCodeSent(String verificationId,
                                    PhoneAuthProvider.ForceResendingToken token) {
 
-                Toast.makeText(PhoneVerify.this, "Code Has Been Sent", Toast.LENGTH_SHORT).show();
+                dialog.show();
+                otp.setText("");
+                mob.setText(ephonenum.getText().toString());
+                Toast.makeText(PhoneVerify.this, "OTP Sent. Check Your Phone", Toast.LENGTH_SHORT).show();
                 mVerificationId = verificationId;
                 mResendToken = token;
 
@@ -136,33 +140,30 @@ public class PhoneVerify extends AppCompatActivity {
         };
 
 
-        final Button verify = dialog.findViewById(R.id.button_verify_phone);
-        final EditText otp = dialog.findViewById(R.id.field_verification_code);
-        final TextView mob = dialog.findViewById(R.id.mob);
-        final Button resend = dialog.findViewById(R.id.button_resend_otp);
-        dialog.setTitle("VERIFY OTP");
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         try {
-            mob.setText(user.getPhoneNumber());
-        } catch (Exception e) {
-            Toast.makeText(this, "Phone Number Not Found", Toast.LENGTH_SHORT).show();
+            mob.setText(ephonenum.getText().toString());
+        }catch (Exception e){
+            Toast.makeText(this,"Phone Number Not Found",Toast.LENGTH_SHORT).show();
         }
         resend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(PhoneVerify.this, "RESENDING....", Toast.LENGTH_SHORT).show();
-                resendVerificationCode(ephonenum.getText().toString(), mResendToken);
+                Toast.makeText(PhoneVerify.this, "RESENDING...", Toast.LENGTH_SHORT).show();
+                resendVerificationCode(ephonenum.getText().toString(),mResendToken);
 
             }
         });
         verify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (otp.length() != 6) {
-                    Toast.makeText(PhoneVerify.this, "Please,Enter Correct OTP", Toast.LENGTH_SHORT).show();
-                } else {
+                if(otp.length()!=6)
+                {
+                    Toast.makeText(PhoneVerify.this, "Enter Correct OTP", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
 
-                    dialog.dismiss();
+                    //  dialog.dismiss();
                     verifyOtp(otp.getText().toString());
 
                 }
@@ -172,10 +173,9 @@ public class PhoneVerify extends AppCompatActivity {
 
 
     }
-
     private void resendVerificationCode(String phoneNumber, PhoneAuthProvider.ForceResendingToken token) {
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                "+91" + phoneNumber,        // Phone number to verify
+                "+91"+phoneNumber,        // Phone number to verify
                 60,                 // Timeout duration
                 TimeUnit.SECONDS,   // Unit of timeout
                 this,               // Activity (for callback binding)
@@ -183,31 +183,27 @@ public class PhoneVerify extends AppCompatActivity {
                 token);             // ForceResendingToken from callbacks
     }
 
-    private void verifyOtp(String code) {
+    private void verifyOtp(String code)
+    {
         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, code);
         signInWithPhoneAuthCredential(credential);
     }
-
     public void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
         firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-//                            // Sign in success, update UI with the signed-in user's information
-//                            if (prefs.getBoolean("Firstrun", true)) {
-//                                // Do first run stuff here then set 'firstrun' as false
-//                                // using the following line to edit/commit prefs
-                            startActivity(new Intent(PhoneVerify.this, hello.class));
-//                                prefs.edit().putBoolean("firstrun", false).commit();
-//
+                            // Sign in success, update UI with the signed-in user's information
+                            FirebaseUser user = task.getResult().getUser();
+                            startActivity(new Intent(PhoneVerify.this,hello.class));
+                            finish();
 
                         } else {
                             // Sign in failed, display a message and update the UI
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                                Toast.makeText(PhoneVerify.this, "Invalid Credential", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(PhoneVerify.this, "Invalid OTP", Toast.LENGTH_SHORT).show();
+                                otp.setError("Invalid OTP");
+                                //  Toast.makeText(PhoneVerify.this, "Invalid Credential", Toast.LENGTH_SHORT).show();
                             }
 
                         }
@@ -215,4 +211,11 @@ public class PhoneVerify extends AppCompatActivity {
                 });
 
 
-    }}
+    }
+
+    protected void onStart () {
+        super.onStart();
+        firebaseAuth.addAuthStateListener(mstate);
+    }
+
+}

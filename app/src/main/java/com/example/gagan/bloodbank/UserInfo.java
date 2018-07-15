@@ -3,7 +3,7 @@ package com.example.gagan.bloodbank;
 public class UserInfo {
     String name, email, address, state, city, gender, bloodgroup, mob, donor,userid;
 
-    public UserInfo(String name, String email, String address, String state, String city, String gender, String bloodgroup, String mob, String donor,String userid) {
+    public UserInfo(String name, String email, String address, String state, String city, String gender, String bloodgroup, String mob, String donor) {
         this.name = name;
         this.email = email;
         this.address = address;

@@ -1,7 +1,10 @@
 package com.example.gagan.bloodbank;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -69,7 +72,7 @@ public class hello extends AppCompatActivity {
 
         dropdown = findViewById(R.id.spinner);
         String[] items = new String[]{"A-", "A+", "B-", "B+", "AB-", "AB+", "O-", "O+"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item, items);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,R.layout.state_list,R.id.spinnerText, items);
         dropdown.setAdapter(adapter);
         progressdialog = new ProgressDialog(this);
         mfirebaseauth = FirebaseAuth.getInstance();
@@ -143,90 +146,115 @@ public class hello extends AppCompatActivity {
                     Toast.makeText(hello.this, "Please Enter Valid Email Address", Toast.LENGTH_SHORT).show();
 
                 } else {
-                    Log.d("GAGAN","ÄDD DATA TO CALL");
-                    Cities state=(Cities)stateSpinner.getSelectedItem();
-                    states=state.getState();
+                    Log.d("GAGAN", "ÄDD DATA TO CALL");
+                    Cities state = (Cities) stateSpinner.getSelectedItem();
+                    states = state.getState();
                     city = citySpinner.getSelectedItem().toString();
-                    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-                    FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-                    String uid = firebaseUser.getUid();
+                    if(states==null||city==null)
+                    {
+                        Toast.makeText(hello.this, "Please Select State and City", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+                        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                        String userid = firebaseUser.getUid();
 
-                    Log.d("GAGAN",uid);
-                    addData(ename.getText().toString().trim(), eemail.getText().toString().trim(), eaddress.getText().toString().trim(),states,city, emob.getText().toString().trim(), user_bloodgroup, user_gender, user_donor,userid);
-                   // startActivity(new Intent(hello.this, ViewPagerActivity.class));
+                        addData(ename.getText().toString().trim(), eemail.getText().toString().trim(), eaddress.getText().toString().trim(), states, city, emob.getText().toString().trim(), user_bloodgroup, user_gender, user_donor, userid);
+                        // startActivity(new Intent(hello.this, ViewPagerActivity.class));
 
-                    Intent intent = new Intent(hello.this,Profile.class);
-                    //intent.putExtra("ID",userid);
-                    startActivity(intent);
+                        Intent intent = new Intent(hello.this, Profile.class);
+                        //intent.putExtra("ID",userid);
+                        startActivity(intent);
+                    }
                 }
                 progressdialog.dismiss();
+                }
 
-            }
+
+
         });
 
     }
-    public void loadStateandCity()
-    {
-        final List<Cities> stateList=new ArrayList<>();
-        final List<String> states=new ArrayList<>();
-        JsonArrayRequest jsonArrayRequest=new JsonArrayRequest(Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                try {
-                    for (int i = 0; i < response.length(); i++) {
-                        JSONObject jsonObject = response.getJSONObject(i);
-                        String state = jsonObject.getString("state");
-                        Log.d("GAGAN","STATE IS "+state);
-                        JSONArray cities = jsonObject.getJSONArray("cities");
-                        List<String> citiesList = new ArrayList<>();
-                        for (int j = 0; j < cities.length(); j++) {
-                            citiesList.add(cities.getString(j));
-                            Log.d("GAGAN","CITIES IS "+cities.getString(j));
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+    public void loadStateandCity() {
+        final List<Cities> stateList = new ArrayList<>();
+        final List<String> states = new ArrayList<>();
+        if (isNetworkAvailable()) {
+            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, URL, null, new Response.Listener<JSONArray>() {
+                @Override
+                public void onResponse(JSONArray response) {
+                    try {
+                        for (int i = 0; i < response.length(); i++) {
+                            JSONObject jsonObject = response.getJSONObject(i);
+                            String state = jsonObject.getString("state");
+                            Log.d("GAGAN", "STATE IS " + state);
+                            JSONArray cities = jsonObject.getJSONArray("cities");
+                            List<String> citiesList = new ArrayList<>();
+                            for (int j = 0; j < cities.length(); j++) {
+                                citiesList.add(cities.getString(j));
+                                Log.d("GAGAN", "CITIES IS " + cities.getString(j));
+                            }
+                            stateList.add(new Cities(state, citiesList));
+                            states.add(state);
+
+
                         }
-                        stateList.add(new Cities(state, citiesList));
-                        states.add(state);
+                        final CityAdapter cityAdapter = new CityAdapter(hello.this,
+                                R.layout.state_list, R.id.spinnerText, stateList);
+                        stateSpinner.setAdapter(cityAdapter);
+                        stateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                Cities cityDetails = cityAdapter.getItem(position);
+                                List<String> cityList = cityDetails.getCities();
+                                ArrayAdapter citiesAdapter = new ArrayAdapter<>(hello.this,
+                                        R.layout.city_list, R.id.cityspinnerText, cityList);
+                                citySpinner.setAdapter(citiesAdapter);
+                            }
 
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
 
+                            }
+                        });
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                    final CityAdapter cityAdapter = new CityAdapter(hello.this,
-                            R.layout.state_list, R.id.spinnerText, stateList);
-                    stateSpinner.setAdapter(cityAdapter);
-                    stateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                        @Override
-                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                            Cities cityDetails = cityAdapter.getItem(position);
-                            List<String> cityList = cityDetails.getCities();
-                            ArrayAdapter citiesAdapter = new ArrayAdapter<>(hello.this,
-                                    R.layout.city_list, R.id.cityspinnerText, cityList);
-                            citySpinner.setAdapter(citiesAdapter);
-                        }
-
-                        @Override
-                        public void onNothingSelected(AdapterView<?> parent) {
-
-                        }
-                    });
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
 
-            }
-        });
-        Singleton.getInstance(this).addToRequestQueue(jsonArrayRequest);
+                }
+            });
+            Singleton.getInstance(this).addToRequestQueue(jsonArrayRequest);
+        } else {
+            Toast.makeText(this, "Please Check Your Internet", Toast.LENGTH_SHORT).show();
+        }
+    }
+    public boolean isConnected()
+    {
+        boolean connected = false;
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            //we are connected to a network
+            connected = true;
+        }
+        else
+            connected = false;
+        return connected;
     }
     public void addData(String name, String email, String address, String state ,String city, String mobile, String bloodgroup, String gender, String donor,String userid) {
         Log.d("GAGAN","METGOD CALL ADD DATA");
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-        String uid = firebaseUser.getUid();
-
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("User").child(uid);
-        UserInfo info = new UserInfo(name, email, address, state ,city, gender, bloodgroup, mobile, donor,uid);
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("User").child(userid);
+        UserInfo info = new UserInfo(name, email, address, state ,city, gender, bloodgroup, mobile, donor);
         databaseReference.setValue(info);
 
     }
