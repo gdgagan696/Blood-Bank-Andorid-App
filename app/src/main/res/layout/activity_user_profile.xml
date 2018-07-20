@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView android:layout_height="match_parent"
     android:layout_width="match_parent"
-    android:layout_margin="10dp"
+    android:background="#ffeddd"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_width="match_parent">
+        android:layout_width="match_parent"
+        android:layout_margin="15dp"
+        android:background="#ffeddd"
+        >
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:id="@+id/image"
+            android:id="@+id/ximage"
             android:src="@drawable/abc"
             android:layout_gravity="center_horizontal"
             />
@@ -21,29 +24,29 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/name"
+            android:id="@+id/xname"
             android:textSize="25dp"
             android:textColor="#000"
             android:text="Name"
             android:layout_gravity="center_horizontal"
-            android:layout_margin="3dp"
+            android:layout_margin="5dp"
             />
 
         <TextView
             android:textColor="#000"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/blood_group"
+            android:id="@+id/xblood_group"
             android:textSize="18dp"
             android:layout_gravity="center_horizontal"
             android:text="Blood Group"
-            android:layout_margin="3dp"
+            android:layout_margin="5dp"
             android:layout_marginBottom="2dp"
             />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/Donor"
+            android:id="@+id/xDonor"
             android:text="Donor: Yes"
             android:textSize="20dp"
             android:layout_margin="5dp"
@@ -53,7 +56,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/email"
+            android:id="@+id/xemail"
             android:text="Email"
             android:textSize="20dp"
             android:layout_margin="5dp"
@@ -62,7 +65,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/gender"
+            android:id="@+id/xgender"
             android:text="Gender"
             android:textSize="20dp"
             android:layout_margin="5dp"
@@ -73,7 +76,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/addr"
+            android:id="@+id/xaddr"
             android:text="Address"
             android:textSize="20dp"
             android:layout_margin="5dp"
@@ -82,7 +85,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/state"
+            android:id="@+id/xstate"
             android:text="State"
             android:textSize="20dp"
             android:layout_margin="5dp"
@@ -92,7 +95,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/city"
+            android:id="@+id/xcity"
             android:text="City"
             android:textSize="20dp"
             android:layout_margin="5dp"
@@ -102,11 +105,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Edit"
-            android:id="@+id/edit"
-            android:background="#f59393"
+            android:id="@+id/xedit"
+            android:background="#f58383"
+            android:textColor="#000"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="5dp"
             />
 
@@ -114,11 +118,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="LOG OUT"
-            android:id="@+id/logout"
-            android:background="#f59393"
+            android:id="@+id/xlogout"
+            android:textColor="#000"
+            android:background="#f58383"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:layout_marginTop="3dp"
+            android:layout_marginTop="5dp"
             android:layout_marginBottom="10dp"
             />
 

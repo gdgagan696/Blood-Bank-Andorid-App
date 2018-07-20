@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F64C28  "
+    android:background="#ffeddd"
     android:weightSum="2">
 
     <LinearLayout
@@ -33,6 +33,7 @@
             android:fontFamily="@font/abril_fatface"
             android:layout_gravity="center"
             android:gravity="center"
+            android:textColor="#000"
             android:text="Please Enter OTP sent to"/>
 
         <TextView
@@ -43,6 +44,7 @@
             android:layout_marginTop="10sp"
             android:fontFamily="@font/abril_fatface"
             android:layout_width="match_parent"
+            android:textColor="#000"
             android:layout_height="wrap_content"
             android:text="Your number"/>
 

@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -45,25 +46,23 @@ public class hello extends AppCompatActivity {
     private EditText ename;
     private EditText emob;
     private EditText eaddress;
-    private EditText ecity;
     private EditText eemail;
     private Button esignup;
-    private RadioButton emale;
-    private CheckBox echeckBox;
     private Spinner dropdown;
     private Spinner stateSpinner;
     private Spinner citySpinner;
     private RadioGroup radioGroup;
-    private TextView alreadylogin;
-    private ProgressDialog progressdialog;
+    private ProgressBar mProgressBar;
     private FirebaseAuth mfirebaseauth;
     private String user_donor = null;
     private String states=null;
     private String city=null;
+    private Spinner donorSpinner;
     private String userid;
     private String URL="http://api.androiddeft.com/cities/cities_array.json";
 
     String user_gender = null, user_bloodgroup = null;
+    Boolean edit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +73,7 @@ public class hello extends AppCompatActivity {
         String[] items = new String[]{"A-", "A+", "B-", "B+", "AB-", "AB+", "O-", "O+"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,R.layout.state_list,R.id.spinnerText, items);
         dropdown.setAdapter(adapter);
-        progressdialog = new ProgressDialog(this);
+        mProgressBar = findViewById(R.id.signup_progressbar);
         mfirebaseauth = FirebaseAuth.getInstance();
         ename = findViewById(R.id.name);
         eemail = findViewById(R.id.email);
@@ -82,10 +81,13 @@ public class hello extends AppCompatActivity {
         stateSpinner=findViewById(R.id.statespinner);
         citySpinner=findViewById(R.id.cityspinner);
         emob = findViewById(R.id.mob);
-        echeckBox = findViewById(R.id.check);
         esignup = findViewById(R.id.signup);
         radioGroup = findViewById(R.id.radiogroup);
-        progressdialog=new ProgressDialog(this);
+        donorSpinner=findViewById(R.id.donorspinner);
+        String[] ditems = new String[]{"Donor", "Receiver"};
+        ArrayAdapter<String> dadapter = new ArrayAdapter<>(this,R.layout.state_list,R.id.spinnerText, ditems);
+        donorSpinner.setAdapter(dadapter);
+
 
         FirebaseUser firebaseUser = mfirebaseauth.getInstance().getCurrentUser();
         try {
@@ -122,13 +124,8 @@ public class hello extends AppCompatActivity {
         esignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressdialog.setMessage("SIGNING UP");
-                progressdialog.show();
-                if (echeckBox.isChecked()) {
-                    user_donor = "Donor";
-                } else {
-                    user_donor = "Not A Donor";
-                }
+                mProgressBar.setVisibility(View.VISIBLE);
+
                 if (user_bloodgroup == null) {
                     Toast.makeText(hello.this, "Please Select The Blood group", Toast.LENGTH_SHORT).show();
 
@@ -150,6 +147,7 @@ public class hello extends AppCompatActivity {
                     Cities state = (Cities) stateSpinner.getSelectedItem();
                     states = state.getState();
                     city = citySpinner.getSelectedItem().toString();
+                    user_donor=donorSpinner.getSelectedItem().toString();
                     if(states==null||city==null)
                     {
                         Toast.makeText(hello.this, "Please Select State and City", Toast.LENGTH_SHORT).show();
@@ -162,12 +160,12 @@ public class hello extends AppCompatActivity {
                         addData(ename.getText().toString().trim(), eemail.getText().toString().trim(), eaddress.getText().toString().trim(), states, city, emob.getText().toString().trim(), user_bloodgroup, user_gender, user_donor, userid);
                         // startActivity(new Intent(hello.this, ViewPagerActivity.class));
 
-                        Intent intent = new Intent(hello.this, Profile.class);
+                        Intent intent = new Intent(hello.this, UserHome.class);
                         //intent.putExtra("ID",userid);
                         startActivity(intent);
                     }
                 }
-                progressdialog.dismiss();
+                mProgressBar.setVisibility(View.GONE);
                 }
 
 
@@ -235,7 +233,7 @@ public class hello extends AppCompatActivity {
             });
             Singleton.getInstance(this).addToRequestQueue(jsonArrayRequest);
         } else {
-            Toast.makeText(this, "Please Check Your Internet", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please Check Your Internet,Before Proceeding", Toast.LENGTH_SHORT).show();
         }
     }
     public boolean isConnected()

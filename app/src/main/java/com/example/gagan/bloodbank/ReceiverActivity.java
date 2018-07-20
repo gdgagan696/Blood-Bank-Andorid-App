@@ -45,7 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class Profile extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class ReceiverActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
     private RecyclerView recyclerView;
     private CustomAdapter adapter;
     private List<ListItem> listItems;
@@ -56,12 +56,12 @@ public class Profile extends AppCompatActivity implements SwipeRefreshLayout.OnR
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_receiver);
         databaseReference = FirebaseDatabase.getInstance().getReference().child("User");
         swipeRefreshLayout = findViewById(R.id.refresh);
         swipeRefreshLayout.setOnRefreshListener(this);
 
-        Toolbar toolbar = findViewById(R.id.profile_toolbar);
+        Toolbar toolbar = findViewById(R.id.receiver_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Blood Bank");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -79,51 +79,49 @@ public class Profile extends AppCompatActivity implements SwipeRefreshLayout.OnR
         recyclerView.setAdapter(adapter);
         getData();
     }
+
     public void getAllPosts()
-    {
-        listItems.clear();
-        Query query=databaseReference.orderByChild("donor").equalTo("Donor");
-        query.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+        {
+            listItems.clear();
+            Query query = databaseReference.orderByChild("donor").equalTo("Receiver");
+            query.addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    if (dataSnapshot!=null) {
+                        Log.d("GAGAN", "DATASNAPSHOT IS THE " + dataSnapshot.child("name").getValue());
+                        listItems.add(dataSnapshot.getValue(ListItem.class));
+                        adapter.notifyDataSetChanged();
+                        swipeRefreshLayout.setRefreshing(false);
+                    } else {
+                        Toast.makeText(ReceiverActivity.this, "No Receivers Found", Toast.LENGTH_SHORT).show();
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
 
-                if(dataSnapshot!=null) {
-                    Log.d("GAGAN", "DATASNAPSHOT IS THE " + dataSnapshot.child("name").getValue());
-                    listItems.add(dataSnapshot.getValue(ListItem.class));
-                    adapter.notifyDataSetChanged();
-                    swipeRefreshLayout.setRefreshing(false);
                 }
-                else
-                {
-                    Toast.makeText(Profile.this, "No Donors Found", Toast.LENGTH_SHORT).show();
-                    swipeRefreshLayout.setRefreshing(false);
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
                 }
 
-            }
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                }
 
-            }
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                }
 
-            }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+                }
+            });
+        }
 
 
-    }
     public void getData(){
         if (isConnected()){
             try {
@@ -188,7 +186,7 @@ public class Profile extends AppCompatActivity implements SwipeRefreshLayout.OnR
         }
         if(item.getItemId()==R.id.action_userhome)
         {
-            startActivity(new Intent(Profile.this,UserHome.class));
+            startActivity(new Intent(ReceiverActivity.this,UserHome.class));
         }
         return super.onOptionsItemSelected(item);
     }

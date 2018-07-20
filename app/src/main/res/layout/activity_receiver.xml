@@ -9,7 +9,7 @@
     tools:context=".Profile">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/profile_toolbar"
+        android:id="@+id/receiver_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#b72f1d"
@@ -17,24 +17,25 @@
     </android.support.v7.widget.Toolbar>
 
 
-<android.support.v4.widget.SwipeRefreshLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_below="@id/profile_toolbar"
-    android:id="@+id/refresh">
-    <android.support.v7.widget.RecyclerView
+    <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:padding="15dp"
-        android:background="#e5680d"
-        android:layout_below="@+id/profile_toolbar"
-        android:id="@+id/recyclerview">
+        android:layout_below="@id/receiver_toolbar"
+        android:id="@+id/refresh">
 
-    </android.support.v7.widget.RecyclerView>
-</android.support.v4.widget.SwipeRefreshLayout>
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:padding="15dp"
+            android:background="#e5680d"
+            android:layout_below="@+id/receiver_toolbar"
+            android:id="@+id/recyclerview">
+
+        </android.support.v7.widget.RecyclerView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 
 

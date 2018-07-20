@@ -17,8 +17,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="#eddac9"
-        android:id="@+id/linearlayout"
-        >
+        android:id="@+id/linearlayout">
 
         <TextView
             android:layout_width="match_parent"

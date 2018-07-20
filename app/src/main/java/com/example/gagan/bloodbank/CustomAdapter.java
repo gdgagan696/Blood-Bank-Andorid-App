@@ -56,7 +56,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
                 Dialog dialog = new Dialog(context);
                 dialog.setContentView(R.layout.dialog_phone_message);
-                dialog.setTitle("Contact Donor");
+                dialog.setTitle("Contact "+holder.name.getText().toString());
                 dialog.show();
                 Button message_btn = dialog.findViewById(R.id.message_btn);
                 Button call_bnt = dialog.findViewById(R.id.call_btn);
