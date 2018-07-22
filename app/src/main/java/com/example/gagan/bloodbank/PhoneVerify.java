@@ -26,22 +26,27 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.concurrent.TimeUnit;
 
 public class PhoneVerify extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
-    private  EditText ephonenum;
+    private EditText ephonenum;
     private Button sendOtp;
     private Dialog dialog;
     private String mVerificationId;
-    EditText otp;
-    TextView mob;
+    private EditText otp;
+    private TextView mob;
     Button resend,verify;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mcallbacks;
     private PhoneAuthProvider.ForceResendingToken mResendToken;
-
+    private DatabaseReference databaseReference;
     private FirebaseAuth.AuthStateListener mstate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +73,7 @@ public class PhoneVerify extends AppCompatActivity {
 
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (firebaseAuth.getCurrentUser()!=null){// to check whether user is already logged in or not
-                    startActivity(new Intent(PhoneVerify.this,Profile.class));
+                    startActivity(new Intent(PhoneVerify.this,UserHome.class));
 
                 }
             }
@@ -195,9 +200,31 @@ public class PhoneVerify extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = task.getResult().getUser();
-                            startActivity(new Intent(PhoneVerify.this,hello.class));
-                            finish();
+                            FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+                            FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                            final String userid = firebaseUser.getUid();
+                            databaseReference= FirebaseDatabase.getInstance().getReference("User");
+                            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    if(dataSnapshot.hasChild(userid))
+                                    {
+                                        startActivity(new Intent(PhoneVerify.this,UserHome.class));
+                                        finish();
+                                    }
+                                    else {
+                                        startActivity(new Intent(PhoneVerify.this,hello.class));
+                                        finish();
+                                    }
+
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+
 
                         } else {
                             // Sign in failed, display a message and update the UI

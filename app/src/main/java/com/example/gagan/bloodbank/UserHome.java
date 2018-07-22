@@ -11,7 +11,6 @@ public class UserHome extends AppCompatActivity {
     private Button receivers;
     private Button bloodBanks;
     private Button myProfile;
-    private Button share;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +20,6 @@ public class UserHome extends AppCompatActivity {
         receivers=findViewById(R.id.receivers);
         bloodBanks=findViewById(R.id.bloodbanks);
         myProfile=findViewById(R.id.myprofile);
-        share=findViewById(R.id.share);
         donors.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -40,14 +38,7 @@ public class UserHome extends AppCompatActivity {
                 startActivity(new Intent(UserHome.this,BloodBank.class));
             }
         });
-        share.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i=new Intent(android.content.Intent.ACTION_SEND);
-                i.setType("text/plain");
-                startActivity(Intent.createChooser(i,"Share via"));
-            }
-        });
+
     }
 
 

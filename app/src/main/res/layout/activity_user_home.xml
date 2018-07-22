@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".UserHome"
-    android:background="#89ce39">
+    android:background="#ffeddd">
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -30,16 +31,16 @@
             android:background="#e86e43"
             android:elevation="4dp"
             android:padding="16dp">
-        <Button
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:text="Donors"
-            android:drawablePadding="10dp"
-            android:id="@+id/donors"
-            android:fontFamily="@font/abril_fatface"
-            android:background="#e86e43"
-            android:textColor="#000"
-            android:textSize="20sp"/>
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:text="Donors"
+                android:drawablePadding="10dp"
+                android:id="@+id/donors"
+                android:fontFamily="@font/abril_fatface"
+                android:background="@drawable/button2"
+                android:textColor="#000"
+                android:textSize="20sp"/>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 
@@ -63,37 +64,37 @@
                 android:text="RECEIVERS"
                 android:id="@+id/receivers"
                 android:fontFamily="@font/abril_fatface"
-                android:background="#e86e43"
+                android:background="@drawable/button2"
                 android:textColor="#000"
                 android:textSize="17sp"/>
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 
-        <android.support.v7.widget.CardView
-            android:layout_width="wrap_content"
+    <android.support.v7.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="90dp"
+        android:layout_marginLeft="40dp"
+        android:layout_below="@+id/cardview1"
+        android:id="@+id/cardview3">
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="90dp"
-            android:layout_marginLeft="40dp"
-            android:layout_below="@+id/cardview1"
-            android:id="@+id/cardview3">
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#e86e43"
-                android:elevation="4dp"
-                android:padding="16dp">
-                <Button
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:text="BLOOD BANKS"
-                    android:id="@+id/bloodbanks"
-                    android:fontFamily="@font/abril_fatface"
-                    android:background="#e86e43"
-                    android:textColor="#000"
-                    android:textSize="20sp"/>
-            </RelativeLayout>
-        </android.support.v7.widget.CardView>
+            android:background="#e86e43"
+            android:elevation="4dp"
+            android:padding="16dp">
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:text="BLOOD BANKS"
+                android:id="@+id/bloodbanks"
+                android:fontFamily="@font/abril_fatface"
+                android:background="@drawable/button2"
+                android:textColor="#000"
+                android:textSize="20sp"/>
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
     <android.support.v7.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -114,21 +115,11 @@
                 android:text="MY PROFILE"
                 android:id="@+id/myprofile"
                 android:fontFamily="@font/abril_fatface"
-                android:background="#e86e43"
+                android:background="@drawable/button2"
                 android:textColor="#000"
                 android:textSize="20sp"/>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SHARE"
-        android:background="#89ce39"
-        android:id="@+id/share"
-        android:textColor="#000"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"/>
 
 
 

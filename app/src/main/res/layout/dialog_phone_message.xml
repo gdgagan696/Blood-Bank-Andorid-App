@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#dbcdc0">
+    android:background="#ffeddd">
 
 
 
@@ -19,7 +19,7 @@
         android:layout_marginTop="148dp"
         android:layout_marginLeft="20dp"
         android:background="@color/colorPrimaryDark"
-        android:text="Call"
+        android:text="Call..."
         android:drawablePadding="10dp"
         android:drawableLeft="@drawable/ic_call_black"
         android:textAllCaps="false"
@@ -40,7 +40,7 @@
         android:drawablePadding="10dp"
         android:drawableLeft="@drawable/ic_message_black"
         android:background="@color/colorPrimary"
-        android:text="Message"
+        android:text="Message..."
         android:textAllCaps="false"
         android:textColor="#fff" />
 </RelativeLayout>

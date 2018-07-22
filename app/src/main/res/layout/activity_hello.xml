@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffeddd"
+    android:orientation="vertical"
+    android:id="@+id/relativelayout"
     tools:context=".hello">
 
 
@@ -13,7 +15,7 @@
         android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             android:layout_marginTop="3dp">
             <com.rengwuxian.materialedittext.MaterialEditText
@@ -23,7 +25,6 @@
                 android:layout_marginTop="3dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginBottom="3dp"
                 android:drawablePadding="7dp"
                 android:drawableLeft="@drawable/ic_person_name"
                 android:hint="Name..."
@@ -43,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp"
                 android:imeOptions="actionNext"
                 app:met_floatingLabel="highlight"
                 android:hint="Email..."
@@ -62,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp"
                 android:hint="Mobile..."
                 android:imeOptions="actionNext"
                 app:met_floatingLabel="highlight"
@@ -82,7 +83,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp"
                 android:hint="Address..."
                 android:imeOptions="actionNext"
                 app:met_floatingLabel="highlight"
@@ -101,7 +102,7 @@
                 android:orientation="horizontal"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginBottom="3dp">
+                android:layout_marginTop="3dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -128,7 +129,7 @@
                 android:orientation="horizontal"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginBottom="3dp">
+                android:layout_marginTop="3dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -159,14 +160,14 @@
                 android:orientation="horizontal"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginBottom="3dp">
+                android:layout_marginTop="3dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="GENDER:"
                     android:fontFamily="@font/abril_fatface"
-                    android:layout_marginTop="7dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:textSize="15dp"
@@ -181,7 +182,7 @@
                         android:text="Male"
                         android:textColor="#000"
                         android:checked="false"
-                        android:layout_marginTop="5dp"
+                        android:layout_marginTop="3dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:id="@+id/male"/>
@@ -190,7 +191,7 @@
                         android:layout_height="wrap_content"
                         android:text="Female"
                         android:textColor="#000"
-                        android:layout_marginTop="5dp"
+                        android:layout_marginTop="3dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:id="@+id/female"/>>
@@ -203,7 +204,7 @@
                 android:orientation="horizontal"
                 android:layout_marginRight="10dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginBottom="3dp">
+                android:layout_marginTop="3dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -231,7 +232,6 @@
             android:orientation="horizontal"
                 android:layout_marginTop="3dp"
             android:layout_marginRight="10dp"
-            android:layout_marginBottom="3dp"
             android:layout_marginLeft="10dp">
 
             <TextView
@@ -239,7 +239,7 @@
                 android:layout_height="wrap_content"
                 android:text="What You Want To Be:"
                 android:fontFamily="@font/abril_fatface"
-                android:layout_marginTop="7dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:textSize="15dp"
@@ -262,7 +262,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/button1"
                 android:clickable="true"
                 android:focusable="true"
@@ -282,5 +282,5 @@
         android:layout_centerInParent="true"
         android:visibility="gone"/>
 
-</RelativeLayout>
+</LinearLayout>
 

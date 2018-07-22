@@ -87,7 +87,7 @@ public class ReceiverActivity extends AppCompatActivity implements SwipeRefreshL
             query.addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    if (dataSnapshot!=null) {
+                    if (dataSnapshot.hasChildren()) {
                         Log.d("GAGAN", "DATASNAPSHOT IS THE " + dataSnapshot.child("name").getValue());
                         listItems.add(dataSnapshot.getValue(ListItem.class));
                         adapter.notifyDataSetChanged();

@@ -1,6 +1,9 @@
 package com.example.gagan.bloodbank;
 
+import android.app.AlertDialog;
+import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -12,8 +15,10 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -100,73 +105,74 @@ public class BloodBank extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
             String weather = "UNDEFINED";
-            if(isConnected())
-            {
-            try {
-                URL url = new URL(strings[0]);
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                    try {
+                        URL url = new URL(strings[0]);
+                        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
-                InputStream stream = new BufferedInputStream(urlConnection.getInputStream());
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream));
-                StringBuilder builder = new StringBuilder();
+                        InputStream stream = new BufferedInputStream(urlConnection.getInputStream());
+                        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream));
+                        StringBuilder builder = new StringBuilder();
 
-                String inputString;
-                while ((inputString = bufferedReader.readLine()) != null) {
-                    builder.append(inputString);
+                        String inputString;
+                        while ((inputString = bufferedReader.readLine()) != null) {
+                            builder.append(inputString);
+                        }
+
+                        JSONObject root = new JSONObject(builder.toString());
+                        JSONArray banksList = root.getJSONArray("data");
+
+                        BloodBankItem item;
+                        for (int i = -0; i < banksList.length(); i++) {
+                            JSONArray bloodBank = banksList.getJSONArray(i);
+                            //JsonArray bloodBank = bank.getAsJsonArray();
+                            String state = bloodBank.get(1).toString();
+                            String city = bloodBank.get(2).toString();
+                            String district = bloodBank.get(3).toString();
+                            String bankName = bloodBank.get(4).toString();
+                            String address = bloodBank.get(5).toString();
+                            String pincode = bloodBank.get(6).toString();
+                            String contactno = bloodBank.get(7).toString();
+                            String helpline = bloodBank.get(8).toString();
+                            String website = bloodBank.get(11).toString();
+                            String email = bloodBank.get(12).toString();
+                            String servicetime = bloodBank.get(15).toString();
+
+
+                            item = new BloodBankItem();
+                            item.setBloodBankName(bankName);
+                            item.setDistrict(district);
+                            item.setCity(city);
+                            item.setState(state);
+                            item.setAddress(address);
+                            item.setPincode(pincode);
+                            item.setHelpline(helpline);
+                            item.setEmail(email);
+                            item.setWebsite(website);
+                            item.setContactno(contactno);
+                            item.setServicetime(servicetime);
+
+
+                            mListData.add(item);
+                            // mListAdapter.notifyDataSetChanged();
+
+
+                        }
+
+                        urlConnection.disconnect();
+                    } catch (IOException | JSONException e) {
+                        e.printStackTrace();
+                    }
+                    return weather;
                 }
 
-                JSONObject root = new JSONObject(builder.toString());
-                JSONArray banksList = root.getJSONArray("data");
-
-                BloodBankItem item;
-                for(int i=-0;i<banksList.length();i++)
-                {
-                    JSONArray bloodBank = banksList.getJSONArray(i);
-                    //JsonArray bloodBank = bank.getAsJsonArray();
-                    String state = bloodBank.get(1).toString();
-                    String city = bloodBank.get(2).toString();
-                    String district = bloodBank.get(3).toString();
-                    String bankName =  bloodBank.get(4).toString();
-                    String address = bloodBank.get(5).toString();
-                    String pincode = bloodBank.get(6).toString();
-                    String contactno = bloodBank.get(7).toString();
-                    String helpline = bloodBank.get(8).toString();
-                    String website = bloodBank.get(11).toString();
-                    String email = bloodBank.get(12).toString();
-                    String servicetime = bloodBank.get(15).toString();
 
 
-                    item = new BloodBankItem();
-                    item.setBloodBankName(bankName);
-                    item.setDistrict(district);
-                    item.setCity(city);
-                    item.setState(state);
-                    item.setAddress(address);
-                    item.setPincode(pincode);
-                    item.setHelpline(helpline);
-                    item.setEmail(email);
-                    item.setWebsite(website);
-                    item.setContactno(contactno);
-                    item.setServicetime(servicetime);
-
-
-                    mListData.add(item);
-                    // mListAdapter.notifyDataSetChanged();
-
-
-                }
-
-                urlConnection.disconnect();
-            } catch (IOException | JSONException e) {
-                e.printStackTrace();
-            }
-            return weather;        }
-        else {
-                Toast.makeText(BloodBank.this, "No Internet Found", Toast.LENGTH_SHORT).show();
-                return null;
-            }
-
-        }
+    }
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
     public boolean isConnected()
     {
@@ -181,6 +187,15 @@ public class BloodBank extends AppCompatActivity {
             connected = false;
         return connected;
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_search, menu);
+        MenuItem search = menu.findItem(R.id.action_search);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if(item.getItemId()==android.R.id.home)

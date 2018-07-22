@@ -1,10 +1,14 @@
 package com.example.gagan.bloodbank;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -21,6 +25,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,7 +65,6 @@ public class hello extends AppCompatActivity {
     private Spinner donorSpinner;
     private String userid;
     private String URL="http://api.androiddeft.com/cities/cities_array.json";
-
     String user_gender = null, user_bloodgroup = null;
     Boolean edit = false;
 
@@ -84,6 +88,7 @@ public class hello extends AppCompatActivity {
         esignup = findViewById(R.id.signup);
         radioGroup = findViewById(R.id.radiogroup);
         donorSpinner=findViewById(R.id.donorspinner);
+
         String[] ditems = new String[]{"Donor", "Receiver"};
         ArrayAdapter<String> dadapter = new ArrayAdapter<>(this,R.layout.state_list,R.id.spinnerText, ditems);
         donorSpinner.setAdapter(dadapter);
@@ -155,7 +160,7 @@ public class hello extends AppCompatActivity {
                     else {
                         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
                         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-                        String userid = firebaseUser.getUid();
+                        userid = firebaseUser.getUid();
 
                         addData(ename.getText().toString().trim(), eemail.getText().toString().trim(), eaddress.getText().toString().trim(), states, city, emob.getText().toString().trim(), user_bloodgroup, user_gender, user_donor, userid);
                         // startActivity(new Intent(hello.this, ViewPagerActivity.class));
@@ -233,9 +238,25 @@ public class hello extends AppCompatActivity {
             });
             Singleton.getInstance(this).addToRequestQueue(jsonArrayRequest);
         } else {
-            Toast.makeText(this, "Please Check Your Internet,Before Proceeding", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Please Check Your Internet,Before Proceeding", Toast.LENGTH_SHORT).show();
+            AlertDialog alertDialog = new AlertDialog.Builder(hello.this).create();
+            alertDialog.setTitle("No Internet Connection");
+            alertDialog.setMessage("Check Internet Connection and Click Retry");
+            alertDialog.setCancelable(false);
+            alertDialog.setButton("Retry", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                    loadStateandCity();
+                }
+            });
+            alertDialog.show();
         }
     }
+
+
+
+
     public boolean isConnected()
     {
         boolean connected = false;
@@ -250,10 +271,14 @@ public class hello extends AppCompatActivity {
         return connected;
     }
     public void addData(String name, String email, String address, String state ,String city, String mobile, String bloodgroup, String gender, String donor,String userid) {
-        Log.d("GAGAN","METGOD CALL ADD DATA");
+
+            Log.d("GAGAN", "METGOD CALL ADD DATA");
+
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("User").child(userid);
-        UserInfo info = new UserInfo(name, email, address, state ,city, gender, bloodgroup, mobile, donor);
+        UserInfo info = new UserInfo(name, email, address, state, city, gender, bloodgroup, mobile, donor);
         databaseReference.setValue(info);
 
-    }
+        }
+
+
 }

@@ -21,8 +21,13 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".PhoneVerify" />
-        <activity android:name=".hello" />
+        <activity android:name=".PhoneVerify">
+
+        </activity>
+        <activity android:name=".hello">
+
+
+        </activity>
         <activity android:name=".Profile" />
         <activity
             android:name=".ViewPagerActivity"
@@ -31,15 +36,16 @@
         <activity android:name=".UserProfile" />
         <activity android:name=".UserHome">
 
-        </activity>
-        <activity android:name=".ReceiverActivity" />
-        <activity android:name=".BloodBank" />
-        <activity android:name=".SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".ReceiverActivity" />
+        <activity android:name=".BloodBank" />
+        <activity android:name=".SplashScreen">
+
         </activity>
     </application>
 

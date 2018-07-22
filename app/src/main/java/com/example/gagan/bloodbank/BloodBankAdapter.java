@@ -8,13 +8,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BloodBankAdapter extends RecyclerView.Adapter<BloodBankAdapter.BankViewHolder>  {
@@ -66,8 +70,8 @@ public class BloodBankAdapter extends RecyclerView.Adapter<BloodBankAdapter.Bank
                 address.setText("Address: "+listItem.getAddress());
                 state.setText("State: "+listItem.getState());
                 district.setText("District: "+listItem.getDistrict());
-                state.setText("City: "+listItem.getCity());
-                state.setText("Pincode: "+listItem.getPincode());
+                city.setText("City: "+listItem.getCity());
+                pincode.setText("Pincode: "+listItem.getPincode());
                 mob.setText("Contact Num: "+listItem.getContactno());
                 helpline.setText("Helpline Num: "+listItem.getHelpline());
                 email.setText("Email: "+listItem.getEmail());
@@ -82,6 +86,8 @@ public class BloodBankAdapter extends RecyclerView.Adapter<BloodBankAdapter.Bank
     public int getItemCount() {
         return listItems.size();
     }
+
+
 
 
     public class BankViewHolder extends RecyclerView.ViewHolder

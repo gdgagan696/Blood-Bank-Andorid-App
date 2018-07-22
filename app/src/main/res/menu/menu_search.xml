@@ -10,5 +10,7 @@
         app:showAsAction="ifRoom|collapseActionView" />
     <item
         android:id="@+id/action_userhome"
-        android:title="Home"/>
+        android:title="Home"
+        android:icon="@drawable/ic_home_white"
+        app:showAsAction="ifRoom"/>
 </menu>
